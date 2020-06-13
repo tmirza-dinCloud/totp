@@ -12,10 +12,8 @@ class Register(APIView):
 		serialized = UserSerializer(data=request.data)
 		if serialized.is_valid():
 			serialized.save()
-			uri = pyotp.totp.TOTP(serialized.data['mfa_hash']).provisioning_uri(serialized.data['email'], 
-																			issuer_name="SecureApp")
-			qrcode_uri = "https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl={}".format(uri)
-			
+			uri = pyotp.totp.TOTP(serialized.data['mfa_hash']).provisioning_uri(serialized.data['email'],issuer_name="SecureApp")
+			qrcode_uri = "https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl={}".format(uri)			
 			return Response({'message':'User Created Successfully',
 				'qrcode': qrcode_uri}, status=status.HTTP_201_CREATED)
 		else:
@@ -33,9 +31,9 @@ class Login(APIView):
             totp = pyotp.TOTP(user.mfa_hash)
             print(totp.now())
             if totp.verify(otp, valid):
-                return Response({'message':'User authenticated Successfully'}, status=200)
+                return Response({'message':'User authenticated Successfully'}, status=status.HTTP_200_OK)
             else:
-                return Response({'message':'Invalid OTP'}, status=401)
+                return Response({'message':'Invalid OTP'}, status=HTTP_401_UNAUTHORIZED)
 
         else:
-            return Response({'message':'Invalid email/password'}, status=401)
+            return Response({'message':'Invalid email/password'}, status=status.HTTP_401_UNAUTHORIZED)
