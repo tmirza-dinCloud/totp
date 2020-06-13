@@ -16,7 +16,6 @@ class Register(APIView):
 																			issuer_name="SecureApp")
 			qrcode_uri = "https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl={}".format(uri)
 			
-
 			return Response({'message':'User Created Successfully',
 				'qrcode': qrcode_uri}, status=status.HTTP_201_CREATED)
 		else:
@@ -32,7 +31,8 @@ class Login(APIView):
         user = authenticate(username=email, password=password)
        	if user:
             totp = pyotp.TOTP(user.mfa_hash)
-            if totp.verify(otp, valid_window=3):
+            print(totp.now())
+            if totp.verify(otp, valid):
                 return Response({'message':'User authenticated Successfully'}, status=200)
             else:
                 return Response({'message':'Invalid OTP'}, status=401)
