@@ -39,4 +39,4 @@ class Login(APIView):
             return Response({'message':'Invalid email/password'}, status=status.HTTP_401_UNAUTHORIZED)
 
 def test():
-	print("Hello abc")            
+	print("Hello")            
