@@ -37,3 +37,6 @@ class Login(APIView):
 
         else:
             return Response({'message':'Invalid email/password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+def test():
+	pass            
